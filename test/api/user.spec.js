@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 const _ = require('lodash');
 const server = require('../../src/server');
 const { User } = require('../../src/models');
