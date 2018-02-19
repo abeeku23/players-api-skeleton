@@ -7,7 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha test/**/*.spec.js"
+    "test": "mocha test/**/*.spec.js",
+    "start": "node ./src/server.js"
   },
   "author": "Steven White <steven@galchemy.codes>",
   "license": "ISC",

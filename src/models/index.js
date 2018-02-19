@@ -17,7 +17,7 @@ var db = require('../db');
 var AuthController = require('../auth/AuthController');
 app.use('/api/auth', AuthController);
 
-var PlayerController = require('../models/PlayerController');
-app.use('api/players', PlayerController);
+// var PlayerController = require('../models/PlayerController');
+// app.use('/api/players', PlayerController);
 
 module.exports = app;
