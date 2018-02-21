@@ -4,8 +4,7 @@ var UserSchema = new mongoose.Schema({
   last_name: String,
   rating: String,
   handedness: String,
-  enum: ['left' | 'right'],
   created_by: String
 });
-mongoose.model('Player', UserSchema);
+mongoose.model('Player', PlayerSchema);
 module.exports = mongoose.model('Player');
