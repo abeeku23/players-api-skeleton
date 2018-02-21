@@ -16,7 +16,7 @@ router.post('/', ensureAuthorized, function (req, res) {
       last_name: req.body.last_name,
       rating: req.body.rating,
       handedness: req.body.handedness,
-      created_by: req.body.req.created_by
+      created_by: req.body.created_by
     },
     function (err, player) {
       if (err) {
@@ -58,7 +58,7 @@ router.get('/:created_by_id', ensureAuthorized, function (req, res) {
 
 //Deletes a player
 router.delete('/:id', ensureAuthorized, function (req, res) {
-  User.findByIdAndRemove(req.params.id, function (err, player) {
+  Player.findByIdAndRemove(req.params.id, function (err, player) {
     if (err) return res.status(500).send('There was a problem deleting the player.');
     res.status(200).send('Player ' + player.first_name + ' ' + player.last_name + ' was deleted.');
   });
