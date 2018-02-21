@@ -63,3 +63,6 @@ router.delete('/:id', ensureAuthorized, function (req, res) {
     res.status(200).send('Player ' + player.first_name + ' ' + player.last_name + ' was deleted.');
   });
 });
+
+
+module.exports = router;

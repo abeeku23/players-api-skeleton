@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var UserSchema = new mongoose.Schema({
+var PlayerSchema = new mongoose.Schema({
   first_name: String,
   last_name: String,
   rating: String,

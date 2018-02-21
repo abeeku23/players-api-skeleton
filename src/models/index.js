@@ -13,7 +13,7 @@ var db = require('../db');
 var UserController = require('./UserController');
 app.use('/api/user', UserController);
 
-var PlayerController = require('../models/PlayerController');
+var PlayerController = require('./PlayerController');
 app.use('/api/players', PlayerController);
 
 module.exports = app;
