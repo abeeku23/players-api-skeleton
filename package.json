@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "mocha test/**/*.spec.js",
+    "lint": "eslint src/",
     "start": "node ./src/server.js"
   },
   "author": "Steven White <steven@galchemy.codes>",
