@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 const _ = require('lodash');
 const server = require('../../src/server');
-const { User } = require('../../src/models');
+const User = require('../../src/models/User');
 const data = require('../util/data');
 
 describe('User API', () => {
