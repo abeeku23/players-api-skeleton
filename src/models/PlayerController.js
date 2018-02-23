@@ -20,9 +20,9 @@ router.post('/', ensureAuthorized, function (req, res) {
     },
     function (err, player) {
       if (err) {
-        return res.status(500).send('There was a problem adding the player.');
+        return res.sendStatus(500)('There was a problem adding the player.');
       }
-      res.status(200).send({
+      res.sendStatus(200)({
         success: true,
         player
       });
@@ -40,15 +40,15 @@ function ensureAuthorized(req, res, next) {
     req.token = bearerToken;
     next();
   } else {
-    res.send(403);
+    res.sendStatus(403);
   }
 }
 
 //Gets all players scoped to a user
 router.get('/:created_by_id', ensureAuthorized, function (req, res) {
   Player.find({}, function (err, players) {
-      if (err) return res.status(500).send('There was a problem finding the users.');
-      res.status(200).send({
+      if (err) return res.sendStatus(500)('There was a problem finding the users.');
+      res.sendStatus(200)({
         success: true,
         players
       });
@@ -59,8 +59,8 @@ router.get('/:created_by_id', ensureAuthorized, function (req, res) {
 //Deletes a player
 router.delete('/:id', ensureAuthorized, function (req, res) {
   Player.findByIdAndRemove(req.params.id, function (err, player) {
-    if (err) return res.status(500).send('There was a problem deleting the player.');
-    res.status(200).send('Player ' + player.first_name + ' ' + player.last_name + ' was deleted.');
+    if (err) return res.sendStatus(500)('There was a problem deleting the player.');
+    res.sendStatus(200)('Player ' + player.first_name + ' ' + player.last_name + ' was deleted.');
   });
 });
 
