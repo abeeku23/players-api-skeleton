@@ -20,9 +20,9 @@ router.post('/', ensureAuthorized, function (req, res) {
     },
     function (err, player) {
       if (err) {
-        return res.status(500).send('There was a problem adding the player.');
+        return res.status(409).send('There was a problem adding the player.');
       }
-      res.status(200).send({
+      res.status(201).send({
         success: true,
         player
       });
@@ -46,7 +46,7 @@ function ensureAuthorized(req, res, next) {
 //Gets all players scoped to a user
 router.get('/', ensureAuthorized, function (req, res) {
   Player.find({}, function (err, players) {
-      if (err) return res.sendStatus(500)('There was a problem finding the players.');
+      if (err) return res.status(409).send('There was a problem finding the players.');
       res.status(200).send({
         success: true,
         players
@@ -58,7 +58,7 @@ router.get('/', ensureAuthorized, function (req, res) {
 //Deletes a player
 router.delete('/:id', ensureAuthorized, function (req, res) {
   Player.findByIdAndRemove(req.params.id, function (err, player) {
-    if (err) return res.sendStatus(500)('There was a problem deleting the player.');
+    if (err) return res.status(404).send('There was a problem deleting the player.');
     res.status(200).send('Player ' + player.first_name + ' ' + player.last_name + ' was deleted.');
   });
 });
