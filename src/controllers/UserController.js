@@ -16,17 +16,21 @@ var config = require('../config');
 // CREATES A NEW USER
 router.post('/', function (req, res) {
 
-  var hashedPassword = bcrypt.hashSync(req.body.password, 8);
+  var userdata = req.body || {};
+  var hashedPassword = bcrypt.hashSync(userdata.password, 8);
 
   User.create({
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      email: req.body.email,
+      first_name: userdata.first_name,
+      last_name: userdata.last_name,
+      email: userdata.email,
       password: hashedPassword
       //confirm_password: req.body.confirm_password
     },
     function (err, user) {
-      if (err) return res.status(500).send('There was a problem adding the information to the database.');
+      if (!userdata.hasOwnProperty('first_name') || !userdata.hasOwnProperty('last_name') || !userdata.hasOwnProperty('email'))
+        return res.status(500).send('Not all attributes are present');
+
+      //if (err) return res.status(500).send('There was a problem adding the information to the database.');
       //if(this.password !== User.confirm_password) return res.status(500).send('The passwords do not match');
       var token = jwt.sign({
         id: user._id
