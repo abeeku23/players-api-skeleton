@@ -62,7 +62,9 @@ router.delete('/:id', ensureAuthorized, function (req, res) {
       if (err) {
         return res.status(404).send('There was a problem deleting the player.');
       }
-      res.status(200).send('Player ' + player.first_name + ' ' + player.last_name + ' was deleted.');
+      res.status(200).send({
+        success:true,
+        'Player ' : player.first_name + ' ' + player.last_name + ' was deleted.'});
     });
 });
 
