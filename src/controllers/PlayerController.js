@@ -7,6 +7,7 @@ router.use(bodyParser.urlencoded({
 }));
 router.use(bodyParser.json());
 var Player = require('../models/Player');
+var User = require('../models/User');
 
 //Creates Player with a bearer token
 router.post('/', ensureAuthorized, function (req, res) {
@@ -29,7 +30,6 @@ router.post('/', ensureAuthorized, function (req, res) {
     });
 });
 
-
 function ensureAuthorized(req, res, next) {
   var bearerToken;
   var bearerHeader = req.headers['authorization'];
@@ -45,22 +45,25 @@ function ensureAuthorized(req, res, next) {
 
 //Gets all players scoped to a user
 router.get('/', ensureAuthorized, function (req, res) {
-  Player.find({}, function (err, players) {
-      if (err) return res.status(409).send('There was a problem finding the players.');
-      res.status(200).send({
-        success: true,
-        players
-      });
+  Player.find({created_by: User.userID}, function (err, players) {
+    if (err) return res.status(409).send('There was a problem finding the players.');
+    res.status(200).send({
+      success: true,
+      players
+    });
   });
 });
 
 
 //Deletes a player
 router.delete('/:id', ensureAuthorized, function (req, res) {
-  Player.findByIdAndRemove(req.params.id, function (err, player) {
-    if (err) return res.status(404).send('There was a problem deleting the player.');
-    res.status(200).send('Player ' + player.first_name + ' ' + player.last_name + ' was deleted.');
-  });
+  Player.findByIdAndRemove(req.params.id, User.userID,
+    function (err, player) {
+      if (err) {
+        return res.status(404).send('There was a problem deleting the player.');
+      }
+      res.status(200).send('Player ' + player.first_name + ' ' + player.last_name + ' was deleted.');
+    });
 });
 
 

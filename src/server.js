@@ -12,6 +12,8 @@ mongoose.connect('mongodb://apiskeleton:nana@ds235418.mlab.com:35418/playerapisk
 
 var UserController = require('./controllers/UserController');
 app.use('/api/user', UserController);
+//should handle login
+app.use('/api', UserController);
 
 var PlayerController = require('./controllers/PlayerController');
 app.use('/api/players', PlayerController);

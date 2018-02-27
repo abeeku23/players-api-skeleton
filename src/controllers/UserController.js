@@ -16,27 +16,19 @@ var config = require('../config');
 // CREATES A NEW USER
 router.post('/', function (req, res) {
 
-  var userdata = req.body || {};
-  var hashedPassword = bcrypt.hashSync(userdata.password, 8);
+  if (req.body.password !== req.body.confirm_password)
+    return res.status(409).send('The passwords do not match');
+
+  var hashedPassword = bcrypt.hashSync(req.body.password, 8);
 
   User.create({
-      first_name: userdata.first_name,
-      last_name: userdata.last_name,
-      email: userdata.email,
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      email: req.body.email,
       password: hashedPassword
-      //confirm_password: req.body.confirm_password
     },
     function (err, user) {
-      // if (!userdata.hasOwnProperty('email'))
-      //   return res.status(500).send('First name not present');
-      // if (!userdata.hasOwnProperty('last_name'))
-      //   return res.status(500).send('Last name not present');
-      // if (!userdata.hasOwnProperty('email'))
-      //   return res.status(500).send('Email not present');
-
-      if (err) return res.status(409).send('There was a problem adding the information to the database.');
-      
-      //if(this.password !== User.confirm_password) return res.status(500).send('The passwords do not match');
+      if (err) return res.status(409).send('There was a problem adding a new user');
 
       var token = jwt.sign({
         id: user._id
@@ -65,7 +57,7 @@ router.post('/login', function (req, res) {
     email: req.body.email
   }, function (err, user) {
     if (err) return res.status(500).send('Error on the server.');
-    if (!user) return res.status(404).send('No user found.');
+    if (!user) return res.status(401).send('No user found.');
     var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
     if (!passwordIsValid) return res.status(401).send({
       auth: false,
@@ -84,14 +76,6 @@ router.post('/login', function (req, res) {
   });
 });
 
-// router.get('/logout', function (req, res) {
-//   res.status(200).send({
-//     auth: false,
-//     token: null
-//   });
-// });
-
-
 // GETS A SINGLE USER FROM THE DATABASE
 // router.get('/:id', function (req, res) {
 //   User.findById(req.params.id, function (err, user) {
@@ -108,7 +92,7 @@ router.put('/:userId', function (req, res) {
     new: true
   }, function (err, user) {
     if (err) return res.status(409).send('There was a problem updating the user.');
-    res.status(200).send(user);
+    res.status(204).send(user);
   });
 });
 
