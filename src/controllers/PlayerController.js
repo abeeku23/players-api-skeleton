@@ -61,7 +61,7 @@ router.get('/', validateBearerToken, function (req, res) {
 //Deletes a player
 router.delete('/:id', validateBearerToken, function (req, res) {
 
-  Player.findOne({
+  Player.findById({
     playerID: Player.playerID,
     created_by: User.userID
   }, function (err, player) {
@@ -71,7 +71,7 @@ router.delete('/:id', validateBearerToken, function (req, res) {
     if (!player) {
       return res.status(404).send('Player does not exist');
     }
-    Player.deleteOne(playerID, function (err) {
+    Player.findByIdAndRemove(playerID, function (err) {
       if (err) {
         return res.status(404).send('Player not found to remove');
       }

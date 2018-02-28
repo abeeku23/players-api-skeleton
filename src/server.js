@@ -3,13 +3,15 @@
 
 //module.exports = {};
 
+const dotenv = require('dotenv');
+dotenv.config();
+const url = process.env.MONGOLAB_URI;
 
 const express = require('express');
 const app = express();
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://apiskeleton:nana@ds235418.mlab.com:35418/playerapiskeleton');
-// const db = require('../db');
+mongoose.connect(url);
 
 const UserController = require('./controllers/UserController');
 app.use('/api/user', UserController);
