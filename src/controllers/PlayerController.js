@@ -18,7 +18,7 @@ router.post('/', validateBearerToken, function (req, res) {
       last_name: req.body.last_name,
       rating: req.body.rating,
       handedness: req.body.handedness,
-      created_by: req.body.userID
+      //created_by: req.body.userID
     },
     function (err, player) {
       if (err) {
@@ -48,10 +48,10 @@ function validateBearerToken(req, res, next) {
 router.get('/', validateBearerToken, function (req, res) {
   //let players = [];
   Player.find({
-    created_by: User.userID
+    //created_by: User.userID
   }, function (err, players) {
     if (err) return res.status(409).send('There was a problem finding the players.');
-    
+
     // _.each(result, (player) => {
     //   players.push();
     // });
@@ -67,39 +67,41 @@ router.get('/', validateBearerToken, function (req, res) {
 //Deletes a player
 router.delete('/:id', validateBearerToken, function (req, res) {
 
-  Player.findById({
-    playerID: Player.playerID,
-    created_by: Player.created_by
-  }, function (err, player) {
-    if (err) {
-      return res.status(404).send('Player not found');
-    }
-    if (!player) {
-      return res.status(404).send('Player does not exist');
-    }
-    Player.findByIdAndRemove(playerID, function (err) {
+  // Player.findById({
+  //   playerID: Player.playerID,
+  //   //created_by: Player.created_by
+  // }, function (err, player) {
+  //   if (err) {
+  //     return res.status(404).send('Player not found');
+  //   }
+  //   if (!player) {
+  //     return res.status(404).send('Player does not exist');
+  //   }
+  //   Player.findByIdAndRemove(playerID, function (err) {
+  //     if (err) {
+  //       return res.status(404).send('Player not found to remove');
+  //     }
+  //   });
+  //   res.status(200).send({
+  //     success: true,
+  //     'Player ': player.first_name + ' ' + player.last_name + ' was deleted.'
+  //   });
+  // });
+
+
+
+  Player.findByIdAndRemove(req.params.id,
+    function (err, player) {
       if (err) {
-        return res.status(404).send('Player not found to remove');
+        return res.status(404).send('There was a problem deleting the player.');
       }
+      res.status(200).send({
+        success: true,
+        'Player ': player.first_name + ' ' + player.last_name + ' was deleted.'
+      });
     });
-    res.status(200).send({
-      success: true,
-      'Player ': player.first_name + ' ' + player.last_name + ' was deleted.'
-    });
-  });
+
 });
-
-
-// Player.findByIdAndRemove(req.params.id, User.userID,
-//   function (err, player) {
-//     if (err) {
-//       return res.status(404).send('There was a problem deleting the player.');
-//     }
-//     res.status(200).send({
-//       success: true,
-//       'Player ': player.first_name + ' ' + player.last_name + ' was deleted.'
-//     });
-//   });
 
 
 module.exports = router;

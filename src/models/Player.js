@@ -21,10 +21,6 @@ const PlayerSchema = new mongoose.Schema({
   handedness: {
     type: String,
     required: true
-  },
-  created_by: {
-    type: String,
-    required: true
   }
 }, playerID);
 mongoose.model('Player', PlayerSchema);
