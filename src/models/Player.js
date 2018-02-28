@@ -1,4 +1,3 @@
-
 /*jshint esversion: 6 */
 const mongoose = require('mongoose');
 
@@ -23,8 +22,11 @@ const PlayerSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  created_by: String
-},playerID);
+  created_by: {
+    type: String,
+    required: true
+  }
+}, playerID);
 mongoose.model('Player', PlayerSchema);
 module.exports = mongoose.model('Player');
 
