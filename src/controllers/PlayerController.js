@@ -1,23 +1,24 @@
-/*jshint sub:true*/
-var express = require('express');
-var router = express.Router();
-var bodyParser = require('body-parser');
+/*jshint esversion: 6 */
+
+const express = require('express');
+const router = express.Router();
+const bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({
   extended: false
 }));
 router.use(bodyParser.json());
-var Player = require('../models/Player');
-var User = require('../models/User');
+const Player = require('../models/Player');
+const User = require('../models/User');
 
 //Creates Player with a bearer token
-router.post('/', ensureAuthorized, function (req, res) {
+router.post('/', validateBearerToken, function (req, res) {
 
   Player.create({
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       rating: req.body.rating,
       handedness: req.body.handedness,
-      created_by: req.body.created_by
+      created_by: req.body.userID
     },
     function (err, player) {
       if (err) {
@@ -30,11 +31,11 @@ router.post('/', ensureAuthorized, function (req, res) {
     });
 });
 
-function ensureAuthorized(req, res, next) {
-  var bearerToken;
-  var bearerHeader = req.headers['authorization'];
+function validateBearerToken(req, res, next) {
+  let bearerToken;
+  let bearerHeader = req.headers.authorization;
   if (typeof bearerHeader !== 'undefined') {
-    var bearer = bearerHeader.split(" ");
+    let bearer = bearerHeader.split(" ");
     bearerToken = bearer[1];
     req.token = bearerToken;
     next();
@@ -44,8 +45,10 @@ function ensureAuthorized(req, res, next) {
 }
 
 //Gets all players scoped to a user
-router.get('/', ensureAuthorized, function (req, res) {
-  Player.find({created_by: User.userID}, function (err, players) {
+router.get('/', validateBearerToken, function (req, res) {
+  Player.find({
+    created_by: User.userID
+  }, function (err, players) {
     if (err) return res.status(409).send('There was a problem finding the players.');
     res.status(200).send({
       success: true,
@@ -56,17 +59,41 @@ router.get('/', ensureAuthorized, function (req, res) {
 
 
 //Deletes a player
-router.delete('/:id', ensureAuthorized, function (req, res) {
-  Player.findByIdAndRemove(req.params.id, User.userID,
-    function (err, player) {
+router.delete('/:id', validateBearerToken, function (req, res) {
+
+  Player.findOne({
+    playerID: Player.playerID,
+    created_by: User.userID
+  }, function (err, player) {
+    if (err) {
+      return res.status(404).send('Player not found');
+    }
+    if (!player) {
+      return res.status(404).send('Player does not exist');
+    }
+    Player.deleteOne(playerID, function (err) {
       if (err) {
-        return res.status(404).send('There was a problem deleting the player.');
+        return res.status(404).send('Player not found to remove');
       }
-      res.status(200).send({
-        success:true,
-        'Player ' : player.first_name + ' ' + player.last_name + ' was deleted.'});
     });
+    res.status(200).send({
+      success: true,
+      'Player ': player.first_name + ' ' + player.last_name + ' was deleted.'
+    });
+  });
 });
+
+
+  // Player.findByIdAndRemove(req.params.id, User.userID,
+  //   function (err, player) {
+  //     if (err) {
+  //       return res.status(404).send('There was a problem deleting the player.');
+  //     }
+  //     res.status(200).send({
+  //       success: true,
+  //       'Player ': player.first_name + ' ' + player.last_name + ' was deleted.'
+  //     });
+  //   });
 
 
 module.exports = router;

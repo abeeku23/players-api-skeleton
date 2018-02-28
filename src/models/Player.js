@@ -1,8 +1,10 @@
-var mongoose = require('mongoose');
 
-var PlayerID = new extractPlayerID();
+/*jshint esversion: 6 */
+const mongoose = require('mongoose');
 
-var PlayerSchema = new mongoose.Schema({
+const playerID = new extractPlayerID();
+
+const PlayerSchema = new mongoose.Schema({
   first_name: {
     type: String,
     unique: true,
@@ -22,10 +24,11 @@ var PlayerSchema = new mongoose.Schema({
     required: true
   },
   created_by: String
-});
+},playerID);
 mongoose.model('Player', PlayerSchema);
 module.exports = mongoose.model('Player');
 
+//make the auto generated ID the ID to be used for other functionality
 function extractPlayerID() {
   return {
     toJSON: {

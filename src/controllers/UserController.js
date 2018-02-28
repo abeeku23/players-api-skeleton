@@ -1,17 +1,17 @@
 /*jshint esversion: 6 */
 
-var express = require('express');
-var router = express.Router();
-var bodyParser = require('body-parser');
+const express = require('express');
+const router = express.Router();
+const bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({
   extended: true
 }));
 router.use(bodyParser.json());
-var User = require('../models/User');
+const User = require('../models/User');
 
-var jwt = require('jsonwebtoken');
-var bcrypt = require('bcryptjs');
-var config = require('../config');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const config = require('../config');
 
 // CREATES A NEW USER
 router.post('/', function (req, res) {
@@ -19,7 +19,7 @@ router.post('/', function (req, res) {
   if (req.body.password !== req.body.confirm_password)
     return res.status(409).send('The passwords do not match');
 
-  var hashedPassword = bcrypt.hashSync(req.body.password, 8);
+  const hashedPassword = bcrypt.hashSync(req.body.password, 8);
 
   User.create({
       first_name: req.body.first_name,
@@ -30,7 +30,7 @@ router.post('/', function (req, res) {
     function (err, user) {
       if (err) return res.status(409).send('There was a problem adding a new user');
 
-      var token = jwt.sign({
+      const token = jwt.sign({
         id: user._id
       }, config.secret, {
         expiresIn: 86400 // expires in 24 hours
@@ -58,12 +58,12 @@ router.post('/login', function (req, res) {
   }, function (err, user) {
     if (err) return res.status(500).send('Error on the server.');
     if (!user) return res.status(401).send('No user found.');
-    var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+    const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
     if (!passwordIsValid) return res.status(401).send({
       auth: false,
       token: null
     });
-    var token = jwt.sign({
+    const token = jwt.sign({
       id: user._id
     }, config.secret, {
       expiresIn: 86400 // expires in 24 hours
