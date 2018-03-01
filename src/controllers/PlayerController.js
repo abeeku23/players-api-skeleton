@@ -46,16 +46,15 @@ function validateBearerToken(req, res, next) {
 
 //Gets all players scoped to a user
 router.get('/', validateBearerToken, function (req, res) {
-  //let players = [];
-  Player.find({
-    //created_by: User.userID
+  let players = Player.find({
+    created_by: User.userID
   }, function (err, players) {
     if (err) return res.status(409).send('There was a problem finding the players.');
 
     // _.each(result, (player) => {
     //   players.push();
     // });
-
+    //resolve(players);
     res.status(200).send({
       success: true,
       'players': players

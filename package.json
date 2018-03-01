@@ -29,7 +29,8 @@
     "dotenv": "^5.0.1",
     "express": "^4.16.2",
     "express-validation": "^1.0.2",
+    "jshint": "^2.9.5",
     "jsonwebtoken": "^8.1.1",
-    "mongoose": "^5.0.6"
+    "mongoose": "^5.0.7"
   }
 }

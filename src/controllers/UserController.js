@@ -11,7 +11,7 @@ const User = require('../models/User');
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const config = require('../config');
+//const config = require('../config');
 
 // CREATES A NEW USER
 router.post('/', function (req, res) {
@@ -32,7 +32,7 @@ router.post('/', function (req, res) {
 
       const token = jwt.sign({
         id: user._id
-      }, config.secret, {
+      }, process.env.secret, {
         expiresIn: 86400 // expires in 24 hours
       });
       res.status(201).send({
@@ -65,7 +65,7 @@ router.post('/login', function (req, res) {
     });
     const token = jwt.sign({
       id: user._id
-    }, config.secret, {
+    }, process.env.secret, {
       expiresIn: 86400 // expires in 24 hours
     });
     res.status(200).send({
