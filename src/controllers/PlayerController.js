@@ -7,6 +7,8 @@ router.use(bodyParser.urlencoded({
   extended: false
 }));
 router.use(bodyParser.json());
+
+const jwt = require('jsonwebtoken');
 const Player = require('../models/Player');
 const User = require('../models/User');
 
@@ -44,17 +46,23 @@ function validateBearerToken(req, res, next) {
   }
 }
 
+function getUserFromBearToken() {
+  let token = $localStorage.token; //get this with the secret
+  let user = {};
+  if (typeof token !== 'undefined') {
+    let encoded = token.split('.')[1];
+    user = JSON.parse(urlBase64Decode(encoded));
+  }
+  return user;
+}
 //Gets all players scoped to a user
 router.get('/', validateBearerToken, function (req, res) {
-  let players = Player.find({
+  //let players = [];
+  Player.find({
     created_by: User.userID
+    //created_by: getUserFromBearToken().id
   }, function (err, players) {
     if (err) return res.status(409).send('There was a problem finding the players.');
-
-    // _.each(result, (player) => {
-    //   players.push();
-    // });
-    //resolve(players);
     res.status(200).send({
       success: true,
       'players': players
@@ -65,29 +73,6 @@ router.get('/', validateBearerToken, function (req, res) {
 
 //Deletes a player
 router.delete('/:id', validateBearerToken, function (req, res) {
-
-  // Player.findById({
-  //   playerID: Player.playerID,
-  //   //created_by: Player.created_by
-  // }, function (err, player) {
-  //   if (err) {
-  //     return res.status(404).send('Player not found');
-  //   }
-  //   if (!player) {
-  //     return res.status(404).send('Player does not exist');
-  //   }
-  //   Player.findByIdAndRemove(playerID, function (err) {
-  //     if (err) {
-  //       return res.status(404).send('Player not found to remove');
-  //     }
-  //   });
-  //   res.status(200).send({
-  //     success: true,
-  //     'Player ': player.first_name + ' ' + player.last_name + ' was deleted.'
-  //   });
-  // });
-
-
 
   Player.findByIdAndRemove(req.params.id,
     function (err, player) {

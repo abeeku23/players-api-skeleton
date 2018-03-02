@@ -11,7 +11,6 @@ const User = require('../models/User');
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-//const config = require('../config');
 
 // CREATES A NEW USER
 router.post('/', function (req, res) {
