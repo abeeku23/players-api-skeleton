@@ -30,7 +30,7 @@ module.exports = mongoose.model('Player');
 function extractPlayerID() {
   return {
     toJSON: {
-      transform: function (doc, ret, playerID) {
+      transform: function(doc, ret) {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;

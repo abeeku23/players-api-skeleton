@@ -21,8 +21,8 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
-  },
-},userID);
+  }
+}, userID);
 mongoose.model('User', UserSchema);
 module.exports = mongoose.model('User');
 
@@ -30,7 +30,7 @@ module.exports = mongoose.model('User');
 function extractuserID() {
   return {
     toJSON: {
-      transform: function (doc, ret, userID) {
+      transform: function(doc, ret) {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;

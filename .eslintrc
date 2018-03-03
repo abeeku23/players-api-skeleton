@@ -14,7 +14,7 @@
     }],
     "key-spacing": [ 2 ],
     "keyword-spacing": [ 2 ],
-    "linebreak-style": [ 2, "unix" ],
+    "linebreak-style": [ 2, "windows" ],
     "no-console": [ 0 ],
     "no-empty": [ 2, {
       "allowEmptyCatch": true

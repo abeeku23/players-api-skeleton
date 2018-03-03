@@ -13,25 +13,21 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 // CREATES A NEW USER
-router.post('/', function (req, res) {
+router.post('/', function(req, res) {
 
-  if (req.body.password !== req.body.confirm_password)
+  if (req.body.password !== req.body.confirm_password) {
     return res.status(409).send('The passwords do not match');
+  }
 
   const hashedPassword = bcrypt.hashSync(req.body.password, 8);
 
-  User.create({
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      email: req.body.email,
-      password: hashedPassword
-    },
-    function (err, user) {
+  User.create({first_name: req.body.first_name, last_name: req.body.last_name, email: req.body.email, password: hashedPassword},
+    function(err, user) {
       if (err) return res.status(409).send('There was a problem adding a new user');
 
       const token = jwt.sign({
         id: user._id
-      }, process.env.secret, {
+      }, process.env.JWT_SECRET, {
         expiresIn: 86400 // expires in 24 hours
       });
       res.status(201).send({
@@ -43,28 +39,27 @@ router.post('/', function (req, res) {
 });
 
 // RETURNS ALL THE USERS IN THE DATABASE
-router.get('/', function (req, res) {
-  User.find({}, function (err, users) {
+router.get('/', function(req, res) {
+  User.find({}, function(err, users) {
     if (err) return res.status(409).send('There was a problem finding the users.');
     res.status(200).send(users);
   });
 });
 
 
-router.post('/login', function (req, res) {
+router.post('/login', function(req, res) {
   User.findOne({
     email: req.body.email
-  }, function (err, user) {
+  }, function(err, user) {
     if (err) return res.status(500).send('Error on the server.');
     if (!user) return res.status(401).send('No user found.');
     const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-    if (!passwordIsValid) return res.status(401).send({
-      auth: false,
-      token: null
-    });
+    if (!passwordIsValid) {
+      return res.status(401).send({ auth: false, token: null });
+    }
     const token = jwt.sign({
       id: user._id
-    }, process.env.secret, {
+    }, process.env.JWT_SECRET, {
       expiresIn: 86400 // expires in 24 hours
     });
     res.status(200).send({
@@ -85,11 +80,11 @@ router.post('/login', function (req, res) {
 // });
 
 // UPDATES A SINGLE USER IN THE DATABASE
-router.put('/:userId', function (req, res) {
+router.put('/:userId', function(req, res) {
 
   User.findByIdAndUpdate(req.params.userId, req.body, {
     new: true
-  }, function (err, user) {
+  }, function(err, user) {
     if (err) return res.status(409).send('There was a problem updating the user.');
     res.status(204).send({
       success: true,

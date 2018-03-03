@@ -1,7 +1,4 @@
 /*jshint esversion: 6 */
-// TODO
-
-//module.exports = {};
 
 const dotenv = require('dotenv');
 dotenv.config();
