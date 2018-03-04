@@ -21,10 +21,10 @@ const PlayerSchema = new mongoose.Schema({
   handedness: {
     type: String,
     required: true
+  },
+  created_by: {
+    type: String
   }
-  // created_by: {
-  //   type: String
-  // }
 }, playerID);
 mongoose.model('Player', PlayerSchema);
 module.exports = mongoose.model('Player');

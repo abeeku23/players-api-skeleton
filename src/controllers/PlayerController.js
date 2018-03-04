@@ -11,11 +11,11 @@ router.use(bodyParser.json());
 const jwt = require('jsonwebtoken');
 const Player = require('../models/Player');
 //const auth = require('../auth/AuthController');
-const User = require('../models/User');
+//const User = require('../models/User');
 
 //Creates Player with a bearer token
 router.post('/', validateBearerToken, function(req, res) {
-  Player.create({first_name: req.body.first_name, last_name: req.body.last_name, rating: req.body.rating, handedness: req.body.handedness//, created_by: req.body.userID
+  Player.create({first_name: req.body.first_name, last_name: req.body.last_name, rating: req.body.rating, handedness: req.body.handedness, created_by: getUserFromBearerToken(req.token)
   }, function(err, player) {
     if (err) {
       return res.status(409).send('There was a problem adding the player.');
@@ -53,8 +53,8 @@ router.get('/', validateBearerToken, function(req, res) {
     created_by: getUserFromBearerToken(req.token)
   }, function(err, players) {
     if (err) return res.status(409).send('There was a problem finding the players.');
-    console.log(players);
-    //console.log('userID: ' + getUserFromBearerToken(req.token));
+    // console.log(players);
+    // console.log('userID: ' + getUserFromBearerToken(req.token));
     res.status(200).send({
       success: true,
       'players': players
