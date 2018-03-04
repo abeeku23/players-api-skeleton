@@ -62,6 +62,7 @@ router.post('/login', function(req, res) {
     }, process.env.JWT_SECRET, {
       expiresIn: 86400 // expires in 24 hours
     });
+    //console.log(user);
     res.status(200).send({
       success: true,
       user,
@@ -70,31 +71,19 @@ router.post('/login', function(req, res) {
   });
 });
 
-// GETS A SINGLE USER FROM THE DATABASE
-// router.get('/:id', function (req, res) {
-//   User.findById(req.params.id, function (err, user) {
-//     if (err) return res.status(409).send('There was a problem finding the user.');
-//     if (!user) return res.status(404).send('No user found.');
-//     res.status(200).send(user);
-//   });
-// });
-
-
-
 // UPDATES A SINGLE USER IN THE DATABASE
 router.put('/:userId', function(req, res) {
-
-  User.findById(req.params.userId, function(err, user) {
-    if (err) {
-      return res.status(409).send('There was a problem updating the user.');
-    }
-    user.email = req.body.email;
-    console.log(req.body.success);
-    res.status(204).send({
-      success: true,
-      user
+  User.findOneAndUpdate(req.params, req.body, {new: true},
+    function(err, user) {
+      if (err) {
+        res.status(500).send(err);
+      }
+      const token = jwt.sign({id: req.params
+      }, process.env.JWT_SECRET);
+      //console.log(req.body.success);
+      //res.json(user);
+      res.status(204).send({success: true, user, token});
     });
-  });
 });
 
 module.exports = router;

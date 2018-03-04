@@ -221,4 +221,4 @@ curl -XDELETE \
 | Name | Description |
 | ---- | ----------- |
 | DB Connection | MONGOLAB_URI
-| JWT_SECRET |  Secret key
+| Secret key | JWT_SECRET  

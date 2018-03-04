@@ -49,12 +49,12 @@ function getUserFromBearerToken(token) {
 router.get('/', validateBearerToken, function(req, res) {
   //let players = [];
   Player.find({
-    created_by: User.userID
-    //created_by: getUserFromBearerToken(req.token)
+    //created_by: User.userID
+    created_by: getUserFromBearerToken(req.token)
   }, function(err, players) {
     if (err) return res.status(409).send('There was a problem finding the players.');
-    //console.log(players);
-    console.log('userID: ' + getUserFromBearerToken(req.token));
+    console.log(players);
+    //console.log('userID: ' + getUserFromBearerToken(req.token));
     res.status(200).send({
       success: true,
       'players': players
@@ -70,7 +70,7 @@ router.delete('/:id', validateBearerToken, function(req, res) {
   //console.log(validateBearerToken().bearerToken);
   //console.log('token: '+ req.token);
   console.log('userID: ' + getUserFromBearerToken(req.token));
-  Player.findByIdAndRemove({playerId, created_by: getUserFromBearerToken(req.token)
+  Player.findById({playerId, created_by: getUserFromBearerToken(req.token)
   }, function(err, player) {
     if (err) {
       return res.status(404).send('There was a problem deleting the player.');
