@@ -70,7 +70,7 @@ router.delete('/:id', validateBearerToken, function(req, res) {
   //console.log(validateBearerToken().bearerToken);
   //console.log('token: '+ req.token);
   console.log('userID: ' + getUserFromBearerToken(req.token));
-  Player.findById({playerId, created_by: getUserFromBearerToken(req.token)
+  Player.findByIdAndRemove({playerId, created_by: getUserFromBearerToken(req.token)
   }, function(err, player) {
     if (err) {
       return res.status(404).send('There was a problem deleting the player.');
