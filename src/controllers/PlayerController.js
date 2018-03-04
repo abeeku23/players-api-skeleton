@@ -66,15 +66,16 @@ router.get('/', validateBearerToken, function(req, res) {
 //Deletes a player
 router.delete('/:id', validateBearerToken, function(req, res) {
   let playerId = req.params.id;
+  console.log(req.params);
   console.log('playerID: ' + playerId);
   //console.log(validateBearerToken().bearerToken);
   //console.log('token: '+ req.token);
   console.log('userID: ' + getUserFromBearerToken(req.token));
-  Player.findByIdAndRemove({playerId, created_by: getUserFromBearerToken(req.token)
-  }, function(err, player) {
+  Player.findByIdAndRemove(playerId, function(err, player) {
     if (err) {
       return res.status(404).send('There was a problem deleting the player.');
     }
+    console.log(player);
     res.status(200).send({
       success: true,
       'Player ': player.first_name + ' ' + player.last_name + ' was deleted.'
