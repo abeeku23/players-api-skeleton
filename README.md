@@ -218,5 +218,7 @@ curl -XDELETE \
 
 ### Environment Variables
 
+| Name | Description |
+| ---- | ----------- |
 | DB Connection | MONGOLAB_URI
 | JWT_SECRET |  Secret key

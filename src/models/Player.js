@@ -22,6 +22,9 @@ const PlayerSchema = new mongoose.Schema({
     type: String,
     required: true
   }
+  // created_by: {
+  //   type: String
+  // }
 }, playerID);
 mongoose.model('Player', PlayerSchema);
 module.exports = mongoose.model('Player');

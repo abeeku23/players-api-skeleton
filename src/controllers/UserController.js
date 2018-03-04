@@ -39,12 +39,12 @@ router.post('/', function(req, res) {
 });
 
 // RETURNS ALL THE USERS IN THE DATABASE
-router.get('/', function(req, res) {
-  User.find({}, function(err, users) {
-    if (err) return res.status(409).send('There was a problem finding the users.');
-    res.status(200).send(users);
-  });
-});
+// router.get('/', function(req, res) {
+//   User.find({}, function(err, users) {
+//     if (err) return res.status(409).send('There was a problem finding the users.');
+//     res.status(200).send(users);
+//   });
+// });
 
 
 router.post('/login', function(req, res) {
@@ -79,13 +79,17 @@ router.post('/login', function(req, res) {
 //   });
 // });
 
+
+
 // UPDATES A SINGLE USER IN THE DATABASE
 router.put('/:userId', function(req, res) {
 
-  User.findByIdAndUpdate(req.params.userId, req.body, {
-    new: true
-  }, function(err, user) {
-    if (err) return res.status(409).send('There was a problem updating the user.');
+  User.findById(req.params.userId, function(err, user) {
+    if (err) {
+      return res.status(409).send('There was a problem updating the user.');
+    }
+    user.email = req.body.email;
+    console.log(req.body.success);
     res.status(204).send({
       success: true,
       user
