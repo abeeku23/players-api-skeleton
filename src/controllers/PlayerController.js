@@ -58,17 +58,24 @@ router.get('/', validateBearerToken, function(req, res) {
 
 
 //Deletes a player
+/*
+- Find player object in the db
+- return and check the `created_by` attribute
+- compare with the token id of the logged in user
+- if not the same the player cannot be deleted
+- else execute deletion
+*/
 router.delete('/:id', validateBearerToken, function(req, res) {
   let playerId = req.params.id;
-  let player = Player.find({created_by: playerId
-  }, function(err) {
-    if (err) return res.status(409).send('There was a problem finding the player.');
-  });
+  // let player = Player.find({created_by: playerId
+  // }, function(err) {
+  //   if (err) return res.status(409).send('There was a problem finding the player.');
+  // });
   // console.log(player.created_by);
-  // console.log(getUserFromBearerToken(req.token));
-  if (player.created_by !== getUserFromBearerToken(req.token)) {
-    return res.status(404).send('The player not created by this user');
-  }
+  // // console.log(getUserFromBearerToken(req.token));
+  // if (player.created_by !== getUserFromBearerToken(req.token)) {
+  //   return res.status(404).send('The player not created by this user');
+  // }
   Player.findByIdAndRemove(playerId, function(err) {
     if (err) {
       return res.status(404).send('There was a problem deleting the player.');

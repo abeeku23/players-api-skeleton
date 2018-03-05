@@ -38,15 +38,6 @@ router.post('/', function(req, res) {
     });
 });
 
-// RETURNS ALL THE USERS IN THE DATABASE
-// router.get('/', function(req, res) {
-//   User.find({}, function(err, users) {
-//     if (err) return res.status(409).send('There was a problem finding the users.');
-//     res.status(200).send(users);
-//   });
-// });
-
-
 router.post('/login', function(req, res) {
   User.findOne({
     email: req.body.email
@@ -73,18 +64,19 @@ router.post('/login', function(req, res) {
 
 // UPDATES A SINGLE USER IN THE DATABASE
 router.put('/:userId', function(req, res) {
-  //console.log(req.params.userId);
-  User.findByIdAndUpdate(req.params.userId, req.body, {new: true},
-    function(err, user) {
-      if (err) {
-        res.status(500).send(err);
-      }
-      const token = jwt.sign({id: req.params
-      }, process.env.JWT_SECRET);
-      //console.log(req.body.success);
-      //res.json(user);
-      res.status(204).send({success: true, user, token});
-    });
+  console.log(req.params.userId);
+  User.findOneAndUpdate({email: req.params.email}, req.body, {new: true});
+  // function(err, user) {
+  //   if (err) {
+  //     res.status(500).send(err);
+  //   }
+  //console.log(user);
+  const token = jwt.sign({id: req.params.userId
+  }, process.env.JWT_SECRET);
+  //console.log(req.body.success);
+  //res.json(user);
+  res.status(204).send({success: true, token});
 });
+//});
 
 module.exports = router;
