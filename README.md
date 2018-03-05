@@ -215,10 +215,3 @@ curl -XDELETE \
   -H 'Authorization: Bearer <my_jwt_token>' \
   http://localhost:3000/api/players/1
 ```
-
-### Environment Variables
-
-| Name | Description |
-| ---- | ----------- |
-| DB Connection | MONGOLAB_URI
-| Secret key | JWT_SECRET  

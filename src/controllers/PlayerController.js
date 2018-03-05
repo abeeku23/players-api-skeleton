@@ -26,12 +26,11 @@ router.post('/', validateBearerToken, function(req, res) {
 
 function validateBearerToken(req, res, next) {
   let bearerToken;
-  let bearerHeader = req.headers.authorization;
+  let bearerHeader = req.headers.authorization || req.headers['x-access-token'];
   if (typeof bearerHeader !== 'undefined') {
     let bearer = bearerHeader.split('Bearer ');
     bearerToken = bearer[1];
     req.token = bearerToken;
-    //console.log(bearerToken);
     next();
   } else {
     res.status(403).send();
@@ -40,21 +39,16 @@ function validateBearerToken(req, res, next) {
 
 function getUserFromBearerToken(token) {
   const decodedtoken = jwt.decode(token, process.env.JWT_SECRET);
-  //console.log(decodedtoken);
   return decodedtoken.id;
 }
 
 
 //Gets all players scoped to a user
 router.get('/', validateBearerToken, function(req, res) {
-  //let players = [];
   Player.find({
-    //created_by: User.userID
     created_by: getUserFromBearerToken(req.token)
   }, function(err, players) {
     if (err) return res.status(409).send('There was a problem finding the players.');
-    // console.log(players);
-    // console.log('userID: ' + getUserFromBearerToken(req.token));
     res.status(200).send({
       success: true,
       'players': players
@@ -66,23 +60,21 @@ router.get('/', validateBearerToken, function(req, res) {
 //Deletes a player
 router.delete('/:id', validateBearerToken, function(req, res) {
   let playerId = req.params.id;
-  //console.log(req.params);
-  //console.log('playerID: ' + playerId);
-  //console.log(validateBearerToken().bearerToken);
-  //console.log('token: '+ req.token);
-  //console.log('userID: ' + getUserFromBearerToken(req.token));
-  //let created_by = getUserFromBearerToken(req.token);
-  Player.findByIdAndRemove(playerId, function(err, player) {
+  let player = Player.find({created_by: playerId
+  }, function(err) {
+    if (err) return res.status(409).send('There was a problem finding the player.');
+  });
+  // console.log(player.created_by);
+  // console.log(getUserFromBearerToken(req.token));
+  if (player.created_by !== getUserFromBearerToken(req.token)) {
+    return res.status(404).send('The player not created by this user');
+  }
+  Player.findByIdAndRemove(playerId, function(err) {
     if (err) {
       return res.status(404).send('There was a problem deleting the player.');
     }
-    // if (created_by!== Player.created_by) {
-    //   return res.status(404).send('Player was not created by that user');
-    // }
-    console.log(player);
     res.status(200).send({
-      success: true,
-      'Player ': player.first_name + ' ' + player.last_name + ' was deleted.'
+      success: true
     });
   });
 });

@@ -73,8 +73,8 @@ router.post('/login', function(req, res) {
 
 // UPDATES A SINGLE USER IN THE DATABASE
 router.put('/:userId', function(req, res) {
-  console.log(req.params.userId);
-  User.findOneAndUpdate(req.params.userId, req.body, {new: true},
+  //console.log(req.params.userId);
+  User.findByIdAndUpdate(req.params.userId, req.body, {new: true},
     function(err, user) {
       if (err) {
         res.status(500).send(err);
