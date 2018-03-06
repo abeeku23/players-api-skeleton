@@ -70,7 +70,8 @@ router.put('/:userId', function(req, res) {
       if (err) {
         res.status(500).send(err);
       }
-      //console.log(user);
+      console.log(user);
+      console.log(err);
       let token = jwt.sign({id: req.params.userId
       }, process.env.JWT_SECRET);
       //console.log(req.body.success);
