@@ -20,6 +20,7 @@
     "eslint": "^4.0.0",
     "lodash": "^4.17.4",
     "mocha": "^3.5.3",
+    "mockgoose": "^7.3.5",
     "sinon": "^2.3.4",
     "sinon-chai": "^2.11.0"
   },

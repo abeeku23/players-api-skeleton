@@ -73,12 +73,17 @@ router.delete('/:id', validateBearerToken, function(req, res) {
   let playerId = req.params.id;
   console.log('playerID: ' + playerId);
   console.log('loggedInuserID: ' + getUserFromBearerToken(req.token));
+
+
   Player.findOneAndRemove({_id: playerId, created_by: getUserFromBearerToken(req.token)}, (err, player)=> {
     if (err) {
       return res.status(404).send('There was a problem deleting the player.');
     }
-    console.log('status code from response: ' +res.statusCode);
-    console.log(player.created_by);
+    // if (this.playerId !== player.created_by) {
+    //   return res.status(404).send('This player was not created by the user');
+    // }
+    console.log(res.statusCode);
+    //console.log(player._id);
     let response = {
       success: true,
       player
