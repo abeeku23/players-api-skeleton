@@ -62,21 +62,18 @@ router.post('/login', function(req, res) {
   });
 });
 
+
 // UPDATES A SINGLE USER IN THE DATABASE
+//Pull info on the user based on its ID
+//the response
+
 router.put('/:userId', function(req, res) {
-  console.log(req.params.userId);
-  User.findOneAndUpdate({email: req.params.email}, req.body, {new: true},
+  User.findByIdAndUpdate({_id: req.params.userId}, req.body, {new: true},
     function(err, user) {
       if (err) {
         res.status(500).send(err);
       }
-      console.log(user);
-      console.log(err);
-      let token = jwt.sign({id: req.params.userId
-      }, process.env.JWT_SECRET);
-      //console.log(req.body.success);
-      //res.json(user);
-      res.status(204).send({success: true, user, token});
+      res.status(200).send({'success': true, user});
     });
 });
 

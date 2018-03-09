@@ -133,7 +133,7 @@ describe('User API', () => {
         .send(updatedUser)
         .end((err, res) => {
           expect(err).not.to.exist;
-          expect(res.status).to.equal(204);
+          expect(res.status).to.equal(200);
           expect(res.body.success).to.be.true;
           expect(res.body.user).to.be.a('object');
           expect(res.body.user.id).to.be.a('string');
