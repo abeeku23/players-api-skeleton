@@ -10,8 +10,6 @@ router.use(bodyParser.json());
 
 const jwt = require('jsonwebtoken');
 const Player = require('../models/Player');
-//const auth = require('../auth/AuthController');
-//const User = require('../models/User');
 
 //Creates Player with a bearer token
 router.post('/', validateBearerToken, function(req, res) {

@@ -53,7 +53,6 @@ router.post('/login', function(req, res) {
     }, process.env.JWT_SECRET, {
       expiresIn: 86400 // expires in 24 hours
     });
-    //console.log(user);
     res.status(200).send({
       success: true,
       user,
@@ -64,9 +63,6 @@ router.post('/login', function(req, res) {
 
 
 // UPDATES A SINGLE USER IN THE DATABASE
-//Pull info on the user based on its ID
-//the response
-
 router.put('/:userId', function(req, res) {
   User.findByIdAndUpdate({_id: req.params.userId}, req.body, {new: true},
     function(err, user) {
